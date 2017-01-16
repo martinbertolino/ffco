@@ -47,9 +47,9 @@ ALTER SEQUENCE public."User_UserId_seq"
 CREATE TABLE public."User"
 (
     "UserId" integer NOT NULL DEFAULT nextval('"User_UserId_seq"'::regclass),
-    "UserName" character varying(32)[] COLLATE pg_catalog."default" NOT NULL,
-    "UserFirstName" character varying(32)[] COLLATE pg_catalog."default" NOT NULL,
-    "UserLastName" character varying(32)[] COLLATE pg_catalog."default" NOT NULL,
+    "UserName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    "UserFirstName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    "UserLastName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT "User_pkey" PRIMARY KEY ("UserId") USING INDEX TABLESPACE ffco,
     CONSTRAINT "UserName" UNIQUE ("UserName") USING INDEX TABLESPACE ffco
 )
@@ -80,8 +80,8 @@ ALTER SEQUENCE public."ProductGrouping_ProductGroupingId_seq"
 CREATE TABLE public."ProductGrouping"
 (
     "ProductGroupingId" integer NOT NULL DEFAULT nextval('"ProductGrouping_ProductGroupingId_seq"'::regclass),
-    "ProductGroupingName" character varying(32)[] COLLATE pg_catalog."default" NOT NULL,
-    "ProductGroupingDescription" character varying(32)[] COLLATE pg_catalog."default" NOT NULL,
+    "ProductGroupingName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    "ProductGroupingDescription" character varying(32) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT "ProductGrouping_pkey" PRIMARY KEY ("ProductGroupingId") USING INDEX TABLESPACE ffco,
     CONSTRAINT "ProductGroupingName" UNIQUE ("ProductGroupingName") USING INDEX TABLESPACE ffco
 )
@@ -112,8 +112,8 @@ ALTER SEQUENCE public."ProductUnit_UnitId_seq"
 CREATE TABLE public."ProductUnit"
 (
     "UnitId" integer NOT NULL DEFAULT nextval('"ProductUnit_UnitId_seq"'::regclass),
-    "UnitName" character varying(32)[] COLLATE pg_catalog."default" NOT NULL,
-    "UnitDescription" character varying(32)[] COLLATE pg_catalog."default" NOT NULL,
+    "UnitName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    "UnitDescription" character varying(32) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT "ProductUnit_pkey" PRIMARY KEY ("UnitId") USING INDEX TABLESPACE ffco,
     CONSTRAINT "UnitName" UNIQUE ("UnitName") USING INDEX TABLESPACE ffco
 )
@@ -144,8 +144,8 @@ ALTER SEQUENCE public."Product_ProductId_seq"
 CREATE TABLE public."Product"
 (
     "ProductId" integer NOT NULL DEFAULT nextval('"Product_ProductId_seq"'::regclass),
-    "ProductName" character varying(32)[] COLLATE pg_catalog."default" NOT NULL,
-    "ProductDescription" character varying(32)[] COLLATE pg_catalog."default" NOT NULL,
+    "ProductName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    "ProductDescription" character varying(32) COLLATE pg_catalog."default" NOT NULL,
     "ProductPrice" numeric(10, 2) NOT NULL,
     "ProductGroupingId" integer NOT NULL,
     "ProductUnitId" integer NOT NULL,
@@ -190,6 +190,7 @@ CREATE TABLE public."SalesTransaction"
     "SalesTransactionDateTime" timestamp without time zone NOT NULL,
     "SalesTransactionTotal" numeric(10, 2) NOT NULL,
     "SalesTransactionActual" numeric(10, 2) NOT NULL,
+    "SalesTransactionStatus" integer NOT NULL,
     "SalesTransactionUserId" integer NOT NULL,
     "SalesTransactionMachineName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT "SalesTransaction_pkey" PRIMARY KEY ("SalesTransactionId") USING INDEX TABLESPACE ffco,
@@ -205,6 +206,11 @@ TABLESPACE ffco;
 
 ALTER TABLE public."SalesTransaction"
     OWNER to postgres;
+
+/*  maintenance
+    2017/1/15 added status
+    ALTER TABLE public."SalesTransaction" ADD COLUMN "SalesTransactionStatus" integer NOT NULL;
+*/
 
 -- Table: public."SalesTransactionDetail"
 
