@@ -8,15 +8,15 @@ var chance = new Chance();
 
 console.log('started...');
 
-//TODO: this needs to come from a config file or the environment
+//this comes mostly from the environment for security reasons, don't hardcode in source
 var config = {
-    user: 'postgres', //env var: PGUSER
-    database: 'ffco', //env var: PGDATABASE
-    password: 'strato69', //env var: PGPASSWORD
-    host: 'localhost', // Server hosting the postgres database
-    port: 5432, //env var: PGPORT
-    max: 10, // max number of clients in the pool
-    idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
+    user: process.env.PGUSER, //env var: PGUSER
+    database: process.env.PGDATABASE, //env var: PGDATABASE
+    password: process.env.PGPASSWORD, //env var: PGPASSWORD
+    host: process.env.PGHOST, // Server hosting the postgres database
+    port: process.env.PGPORT, //env var: PGPORT
+    max: process.env.PGMAXPOOLSIZE, // max number of clients in the pool
+    idleTimeoutMillis: process.env.PGIDLETIMEOUTMS, // how long a client is allowed to remain idle before being closed
 };
 
 //this initializes a connection pool
@@ -55,7 +55,7 @@ pool.query('select * from public."User"', function (error, result) {
     }
 });
 
-var randomUsers = _.map(_.range(100), function(item) {
+var randomUsers = _.map(_.range(5), function(item) {
     let user = {
         userName: chance.email(),
         firtsName: chance.first(),
