@@ -1,5 +1,5 @@
 -- connect using the commend:
--- "c:\Program Files\PostgreSQL\9.6\bin\psql.exe" -U postgres
+-- "c:\Program Files\PostgreSQL\9.6\bin\psql.exe" --username=postgres --dbname=ffco
 
 -- Tablespace: ffco
 
@@ -82,6 +82,7 @@ CREATE TABLE public."ProductGrouping"
     "ProductGroupingId" integer NOT NULL DEFAULT nextval('"ProductGrouping_ProductGroupingId_seq"'::regclass),
     "ProductGroupingName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
     "ProductGroupingDescription" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    "ProductGroupingOrder" integer NOT NULL,
     CONSTRAINT "ProductGrouping_pkey" PRIMARY KEY ("ProductGroupingId") USING INDEX TABLESPACE ffco,
     CONSTRAINT "ProductGroupingName" UNIQUE ("ProductGroupingName") USING INDEX TABLESPACE ffco
 )
@@ -111,11 +112,11 @@ ALTER SEQUENCE public."ProductUnit_UnitId_seq"
 
 CREATE TABLE public."ProductUnit"
 (
-    "UnitId" integer NOT NULL DEFAULT nextval('"ProductUnit_UnitId_seq"'::regclass),
-    "UnitName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
-    "UnitDescription" character varying(32) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "ProductUnit_pkey" PRIMARY KEY ("UnitId") USING INDEX TABLESPACE ffco,
-    CONSTRAINT "UnitName" UNIQUE ("UnitName") USING INDEX TABLESPACE ffco
+    "ProductUnitId" integer NOT NULL DEFAULT nextval('"ProductUnit_UnitId_seq"'::regclass),
+    "ProductUnitName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    "ProductUnitDescription" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "ProductUnit_pkey" PRIMARY KEY ("ProductUnitId") USING INDEX TABLESPACE ffco,
+    CONSTRAINT "ProductUnitName" UNIQUE ("ProductUnitName") USING INDEX TABLESPACE ffco
 )
 WITH (
     OIDS = FALSE
@@ -149,6 +150,7 @@ CREATE TABLE public."Product"
     "ProductPrice" numeric(10, 2) NOT NULL,
     "ProductGroupingId" integer NOT NULL,
     "ProductUnitId" integer NOT NULL,
+    "ProductOrder" integer NOT NULL,
     CONSTRAINT "Product_pkey" PRIMARY KEY ("ProductId") USING INDEX TABLESPACE ffco,
     CONSTRAINT "ProductName" UNIQUE ("ProductName") USING INDEX TABLESPACE ffco,
     CONSTRAINT "ProductGroupingId" FOREIGN KEY ("ProductGroupingId")
@@ -221,7 +223,7 @@ CREATE TABLE public."SalesTransactionDetail"
     "SalesTransactionId" integer NOT NULL,
     "SalesTransactionProductId" integer NOT NULL,
     "SalesTransactionQuantity" numeric(10, 2) NOT NULL,
-    "SalesTransactionPric" numeric(10, 2) NOT NULL,
+    "SalesTransactionPrice" numeric(10, 2) NOT NULL,
     CONSTRAINT "SalesTransactionDetail_pkey" PRIMARY KEY ("SalesTransactionId", "SalesTransactionProductId")  USING INDEX TABLESPACE ffco
 )
 WITH (
