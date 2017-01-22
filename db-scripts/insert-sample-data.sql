@@ -28,16 +28,16 @@ delete from public."ProductGrouping";
 */
 
 INSERT INTO public."ProductGrouping"(
-	"ProductGroupingName", "ProductGroupingDescription", "ProductGroupingOrder")
-	VALUES ('ADULT', 'Adult Group', 0);
+	"ProductGroupingId", "ProductGroupingName", "ProductGroupingDescription", "ProductGroupingOrder")
+	VALUES (nextval('public."ProductGrouping_ProductGroupingId_seq"'), 'ADULT', 'Adult Group', 0);
 
 INSERT INTO public."ProductGrouping"(
-	"ProductGroupingName", "ProductGroupingDescription", "ProductGroupingOrder")
-	VALUES ('CHILD', 'Children Group', 1);
+	"ProductGroupingId", "ProductGroupingName", "ProductGroupingDescription", "ProductGroupingOrder")
+	VALUES (nextval('public."ProductGrouping_ProductGroupingId_seq"'), 'CHILD', 'Children Group', 1);
 
 INSERT INTO public."ProductGrouping"(
-	"ProductGroupingName", "ProductGroupingDescription", "ProductGroupingOrder")
-	VALUES ('BULK', 'Bulk Group', 2);
+	"ProductGroupingId", "ProductGroupingName", "ProductGroupingDescription", "ProductGroupingOrder")
+	VALUES (nextval('public."ProductGrouping_ProductGroupingId_seq"'), 'BULK', 'Bulk Group', 2);
 
 -- create some sample product units
 
@@ -47,26 +47,215 @@ delete from public."ProductUnit";
 */
 
 INSERT INTO public."ProductUnit"(
-	"UnitName", "UnitDescription")
-	VALUES ('ORDER', 'Order(s)');
+	"ProductUnitId", "ProductUnitName", "ProductUnitDescription")
+	VALUES (nextval('public."ProductUnit_UnitId_seq"'), 'ORDER', 'Order(s)');
 
 INSERT INTO public."ProductUnit"(
-	"UnitName", "UnitDescription")
-	VALUES ('LB', 'Pound(s)');
+	"ProductUnitId", "ProductUnitName", "ProductUnitDescription")
+	VALUES (nextval('public."ProductUnit_UnitId_seq"'), 'LB', 'Pound(s)');
 
--- create some sample products
+-- create some products, match previous screenshot
 
 /*
 select * from public."Product";
 delete from public."Product";
 */
 
+-- Adult
+
 INSERT INTO public."Product"(
-	"ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
-	VALUES ('FISH-ADULT-ORDER', 'Fish', 11.00, 
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'FISH-ADULT-ORDER', 
+		'Fish', 
+		11.00, 
 		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'ADULT'), 
-		(select "UnitId" from public."ProductUnit" where "UnitName" = 'ORDER'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
 		0);
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'ESTRA-FISH-ADULT-ORDER', 
+		'Extra Fish', 
+		13.00, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'ADULT'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		1);
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'SHRIMP-ADULT-ORDER', 
+		'Shrimp', 
+		13.00, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'ADULT'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		2);
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'EXTRA-SHRIMP-ADULT-ORDER', 
+		'Extra Shrimp', 
+		13.00, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'ADULT'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		3);
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'COMBO-ADULT-ORDER', 
+		'Combo', 
+		11.00, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'ADULT'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		4);
+
+-- Children
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'FISH-CHILD-ORDER', 
+		'Fish', 
+		6.50, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'CHILD'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		10);
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'SHRIMP-CHILD-ORDER', 
+		'Shrimp', 
+		6.50, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'CHILD'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		11);
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'COMBO-CHILD-ORDER', 
+		'Combo', 
+		6.50, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'CHILD'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		12);
+
+-- Bulk
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'FISH-BULK-ORDER', 
+		'Fish', 
+		20.00, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'BULK'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		20);
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'SHRIMP-BULK-ORDER', 
+		'Shrimp', 
+		20.00, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'BULK'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		21);
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'SPAGHETTI-BULK-ORDER', 
+		'Spaghetti', 
+		3.00, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'BULK'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		22);
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'FF-BULK-ORDER', 
+		'French Fries', 
+		3.00, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'BULK'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		23);
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'APLSCE-BULK-ORDER', 
+		'Apple Sauce', 
+		3.00, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'BULK'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		24);
+
+INSERT INTO public."Product"(
+	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
+	VALUES (
+		nextval('public."ProductUnit_UnitId_seq"'), 
+		'SLAW-BULK-ORDER', 
+		'Slaw', 
+		4.00, 
+		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'BULK'), 
+		(select "ProductUnitId" from public."ProductUnit" where "ProductUnitName" = 'ORDER'), 
+		25);
+
+-- Transaction Status
+-- select * from public."SalesTransactionStatus";
+-- delete from public."SalesTransactionStatus";
+
+INSERT INTO public."SalesTransactionStatus"(
+	"SalesTransactionStatusId", "SalesTransactionStatusName", "SalesTransactionStatustDescription")
+	VALUES (
+		nextval('public."SalesTransactionStatus_SalesTransactionStatusId_seq"'), 
+		'OK', 
+		'Billed Transaction');
+
+INSERT INTO public."SalesTransactionStatus"(
+	"SalesTransactionStatusId", "SalesTransactionStatusName", "SalesTransactionStatustDescription")
+	VALUES (
+		nextval('public."SalesTransactionStatus_SalesTransactionStatusId_seq"'), 
+		'VOID', 
+		'Voided Transaction');
+
+INSERT INTO public."SalesTransactionStatus"(
+	"SalesTransactionStatusId", "SalesTransactionStatusName", "SalesTransactionStatustDescription")
+	VALUES (
+		nextval('public."SalesTransactionStatus_SalesTransactionStatusId_seq"'), 
+		'FREE', 
+		'Free Transaction');
+
+/*
+final check of all the base data
+
+select * from public."User";
+select * from public."ProductGrouping";
+select * from public."ProductUnit";
+select * from public."Product";
+select * from public."SalesTransactionStatus";
+
+*/
 
 -- end
 
