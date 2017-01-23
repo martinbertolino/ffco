@@ -4,7 +4,7 @@
   "description": "",
   "main": "./server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec"
   },
   "keywords": [],
   "author": "",
@@ -17,5 +17,10 @@
     "morgan": "^1.7.0",
     "pg": "^6.1.2",
     "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "request": "^2.79.0"
   }
 }

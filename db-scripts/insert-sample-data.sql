@@ -1,7 +1,23 @@
 -- some sample rows to get started
 
--- use this to clean up the table
--- truncate table public."User" cascade;
+/*
+use this to clean up the tables
+
+truncate table public."User" cascade;
+
+truncate table public."SalesTransactionStatus" cascade;
+truncate table public."Product" cascade;
+truncate table public."ProductUnit" cascade;
+truncate table public."ProductGrouping" cascade;
+truncate table public."User" cascade;
+
+select * from public."User";
+select * from public."ProductGrouping";
+select * from public."ProductUnit";
+select * from public."Product";
+select * from public."SalesTransactionStatus";
+
+*/
 
 /*
 select * from public."User";
