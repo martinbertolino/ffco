@@ -7,7 +7,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const pg = require('pg');
-const async = require('async');
+const genericQuery = require("./genericQuery");
 
 console.log('started...');
 
@@ -45,21 +45,11 @@ app.post('/api/v1/user', function (request, response) {
 
     const insertUserSQL = 'insert into public."User"("UserId", "UserName", "UserFirstName", "UserLastName") \
         values (nextval(\'public."User_UserId_seq"\'), $1, $2, $3) returning "UserId"';
-    //TODO: need to improve the validation of the inpute data
+    //TODO: need to improve the validation of the input data
     const paramsSQL = [request.body.userName, request.body.userFirstName, request.body.userLastName];
 
-    pool.query(insertUserSQL, paramsSQL, function (error, result) {
-        if (error) {
-            console.error('error inserting user into PostgreSQL', error);
-            response.sendStatus(500);
-        } else {
-            if (result.rows.length === 1) {
-                response.status(200).json({ "userId": result.rows[0].UserId });
-            } else {
-                console.error(`error inserting user into PostgreSQL, too many rows returned: ${result.rows.length}`);
-                response.sendStatus(500);
-            }
-        }
+    genericQuery.queryOne(pool, insertUserSQL, paramsSQL, response, function (result) {
+        return { "userId": result.rows[0].UserId };
     });
 });
 
@@ -67,80 +57,38 @@ app.post('/api/v1/user', function (request, response) {
 app.get('/api/v1/user/name/:name', function (request, response) {
 
     //TODO: we should probably sanitize the input here?  What does express do?
-    pool.query('select * from public."User" t where t."UserName"=$1', [request.params.name], function (error, result) {
-        if (error) {
-            console.error('error querying PostgreSQL', error);
-            response.sendStatus(500);
-        } else {
-            if (result.rows.length === 0) {
-                response.status(404).json({ error: "User.UserName not found" });
-            } else if (result.rows.length === 1) {
-                const userData = {
-                    userId: result.rows[0].UserId,
-                    userName: result.rows[0].UserName,
-                    userFirstName: result.rows[0].UserFirstName,
-                    userLastName: result.rows[0].UserLastName
-                };
-                response.status(200).json(userData);
-            } else {
-                console.error(`error querying PostgreSQL, too many rows returned: ${result.rows.length}`);
-                response.sendStatus(500);
-            }
-        }
+    genericQuery.queryOne(pool, 'select * from public."User" t where t."UserName"=$1', [request.params.name], response, function (result) {
+        return {
+            userId: result.rows[0].UserId,
+            userName: result.rows[0].UserName,
+            userFirstName: result.rows[0].UserFirstName,
+            userLastName: result.rows[0].UserLastName
+        };
     });
 });
 
 //  get a user by id
 app.get('/api/v1/user/id/:id', function (request, response) {
 
-    //TODO: we should probably sanitize the input here?  What does express do?
-    pool.query('select * from public."User" t where t."UserId"=$1', [request.params.id], function (error, result) {
-        if (error) {
-            console.error('error querying PostgreSQL', error);
-            response.sendStatus(500);
-        } else {
-            if (result.rows.length === 0) {
-                response.status(404).json({ error: "User.UserId not found" });
-            } else if (result.rows.length === 1) {
-                let userData = {
-                    userId: result.rows[0].UserId,
-                    userName: result.rows[0].UserName,
-                    userFirstName: result.rows[0].UserFirstName,
-                    userLastName: result.rows[0].UserLastName
-                };
-                response.status(200).json(userData);
-            } else {
-                console.error(`error querying PostgreSQL, too many rows returned: ${result.rows.length}`);
-                response.sendStatus(500);
-            }
-        }
+    genericQuery.queryOne(pool, 'select * from public."User" t where t."UserId"=$1', [request.params.id], response, function (result) {
+        return {
+            userId: result.rows[0].UserId,
+            userName: result.rows[0].UserName,
+            userFirstName: result.rows[0].UserFirstName,
+            userLastName: result.rows[0].UserLastName
+        };
     });
 });
 
 // get all users
 app.get('/api/v1/user/', function (request, response) {
 
-    pool.query('select * from public."User"', function (error, result) {
-        if (error) {
-            console.error('error querying PostgreSQL', error);
-            response.sendStatus(500);
-        } else {
-            async.waterfall([
-                (callback) => {
-                    async.map(result.rows, (item, cb) => {
-                        cb (null, {
-                            userId: item.UserId,
-                            userName: item.UserName,
-                            userFirstName: item.UserFirstName,
-                            userLastName: item.UserLastName
-                        });
-                    }, (error, result) => {
-                        callback(null, result);
-                    });
-                }
-            ], (error, result) => {
-                response.status(200).json(result);
-            });
+    genericQuery.queryMany(pool, 'select * from public."User"', [], response, function (item) {
+        return {
+            userId: item.UserId,
+            userName: item.UserName,
+            userFirstName: item.UserFirstName,
+            userLastName: item.UserLastName
         };
     });
 });
@@ -148,50 +96,26 @@ app.get('/api/v1/user/', function (request, response) {
 // update a user by id
 app.put('/api/v1/user/id/:id', function (request, response) {
 
-    const updateUserSQL = 'update public."User" set "UserName"=$1, "UserFirstName"=$2, "UserLastName"=$3 where "UserId"=$4';
+    const updateUserSQL = 'update public."User" set "UserName"=$1, "UserFirstName"=$2, "UserLastName"=$3 where "UserId"=$4 returning "UserId"';
 
     //TODO: need to improve the validation of the input data
     const paramsSQL = [request.body.userName, request.body.userFirstName, request.body.userLastName, request.params.id];
 
-    pool.query(updateUserSQL, paramsSQL, function (error, result) {
-        if (error) {
-            console.error('error updating user in PostgreSQL', error);
-            response.sendStatus(500);
-        } else {
-            if (result.rowCount === 0) {
-                response.status(404).json({ error: "User.UserId not found" });
-            } else if (result.rowCount === 1) {
-                response.sendStatus(200);
-            } else {
-                console.error(`error updating PostgreSQL, too many rows updated: ${result.rowCount}`);
-                response.sendStatus(500);
-            }
-        }
+    genericQuery.queryOne(pool, updateUserSQL, paramsSQL, response, function (result) {
+        return { "userId": result.rows[0].UserId };
     });
 });
 
 // delete a user by id
 app.delete('/api/v1/user/id/:id', function (request, response) {
 
-    const deleteUserSQL = 'delete from public."User" where "UserId"=$1';
+    const deleteUserSQL = 'delete from public."User" where "UserId"=$1 returning "UserId"';
 
     //TODO: need to improve the validation of the inpute data
     const paramsSQL = [request.params.id];
 
-    pool.query(deleteUserSQL, paramsSQL, function (error, result) {
-        if (error) {
-            console.error('error deleting user in PostgreSQL', error);
-            response.sendStatus(500);
-        } else {
-            if (result.rowCount === 0) {
-                response.status(404).json({ error: "User.UserId not found" });
-            } else if (result.rowCount === 1) {
-                response.sendStatus(200);
-            } else {
-                console.error(`error deleting PostgreSQL, too many rows deleted: ${result.rowCount}`);
-                response.sendStatus(500);
-            }
-        }
+    genericQuery.queryOne(pool, deleteUserSQL, paramsSQL, response, function (result) {
+        return { "userId": result.rows[0].UserId };
     });
 });
 
