@@ -7,6 +7,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const pg = require('pg');
+const async = require('async');
 
 console.log('started...');
 
@@ -16,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //this comes mostly from the environment for security reasons, don't hardcode in source
-var config = {
+const config = {
     user: process.env.PGUSER, //env var: PGUSER
     database: process.env.PGDATABASE, //env var: PGDATABASE
     password: process.env.PGPASSWORD, //env var: PGPASSWORD
@@ -27,8 +28,7 @@ var config = {
 };
 
 //this initializes a connection pool
-var pool = new pg.Pool(config);
-//console.dir(pool);
+const pool = new pg.Pool(config);
 
 pool.on('error', function (error, client) {
     // if an error is encountered by a client while it sits idle in the pool
@@ -46,19 +46,15 @@ app.post('/api/v1/user', function (request, response) {
     const insertUserSQL = 'insert into public."User"("UserId", "UserName", "UserFirstName", "UserLastName") \
         values (nextval(\'public."User_UserId_seq"\'), $1, $2, $3) returning "UserId"';
     //TODO: need to improve the validation of the inpute data
-    let paramsSQL = [request.body.userName, request.body.userFirstName, request.body.userLastName];
-
-    console.dir(request.body);
-    console.dir(paramsSQL);
+    const paramsSQL = [request.body.userName, request.body.userFirstName, request.body.userLastName];
 
     pool.query(insertUserSQL, paramsSQL, function (error, result) {
         if (error) {
             console.error('error inserting user into PostgreSQL', error);
             response.sendStatus(500);
         } else {
-            //console.dir(result);
             if (result.rows.length === 1) {
-                response.json({ "userId": result.rows[0].UserId });
+                response.status(200).json({ "userId": result.rows[0].UserId });
             } else {
                 console.error(`error inserting user into PostgreSQL, too many rows returned: ${result.rows.length}`);
                 response.sendStatus(500);
@@ -76,11 +72,10 @@ app.get('/api/v1/user/name/:name', function (request, response) {
             console.error('error querying PostgreSQL', error);
             response.sendStatus(500);
         } else {
-            //console.dir(result);
             if (result.rows.length === 0) {
                 response.status(404).json({ error: "User.UserName not found" });
             } else if (result.rows.length === 1) {
-                let userData = {
+                const userData = {
                     userId: result.rows[0].UserId,
                     userName: result.rows[0].UserName,
                     userFirstName: result.rows[0].UserFirstName,
@@ -104,7 +99,6 @@ app.get('/api/v1/user/id/:id', function (request, response) {
             console.error('error querying PostgreSQL', error);
             response.sendStatus(500);
         } else {
-            //console.dir(result);
             if (result.rows.length === 0) {
                 response.status(404).json({ error: "User.UserId not found" });
             } else if (result.rows.length === 1) {
@@ -131,9 +125,23 @@ app.get('/api/v1/user/', function (request, response) {
             console.error('error querying PostgreSQL', error);
             response.sendStatus(500);
         } else {
-            //console.dir(result);
-            response.status(200).json(result.rows);
-        }
+            async.waterfall([
+                (callback) => {
+                    async.map(result.rows, (item, cb) => {
+                        cb (null, {
+                            userId: item.UserId,
+                            userName: item.UserName,
+                            userFirstName: item.UserFirstName,
+                            userLastName: item.UserLastName
+                        });
+                    }, (error, result) => {
+                        callback(null, result);
+                    });
+                }
+            ], (error, result) => {
+                response.status(200).json(result);
+            });
+        };
     });
 });
 
@@ -142,18 +150,14 @@ app.put('/api/v1/user/id/:id', function (request, response) {
 
     const updateUserSQL = 'update public."User" set "UserName"=$1, "UserFirstName"=$2, "UserLastName"=$3 where "UserId"=$4';
 
-    //TODO: need to improve the validation of the inpute data
-    let paramsSQL = [request.body.userName, request.body.userFirstName, request.body.userLastName, request.params.id];
-
-    //console.dir(request.body);
-    //console.dir(paramsSQL);
+    //TODO: need to improve the validation of the input data
+    const paramsSQL = [request.body.userName, request.body.userFirstName, request.body.userLastName, request.params.id];
 
     pool.query(updateUserSQL, paramsSQL, function (error, result) {
         if (error) {
             console.error('error updating user in PostgreSQL', error);
             response.sendStatus(500);
         } else {
-            //console.dir(result);
             if (result.rowCount === 0) {
                 response.status(404).json({ error: "User.UserId not found" });
             } else if (result.rowCount === 1) {
@@ -172,17 +176,13 @@ app.delete('/api/v1/user/id/:id', function (request, response) {
     const deleteUserSQL = 'delete from public."User" where "UserId"=$1';
 
     //TODO: need to improve the validation of the inpute data
-    let paramsSQL = [request.params.id];
-
-    //console.dir(request.body);
-    //console.dir(paramsSQL);
+    const paramsSQL = [request.params.id];
 
     pool.query(deleteUserSQL, paramsSQL, function (error, result) {
         if (error) {
             console.error('error deleting user in PostgreSQL', error);
             response.sendStatus(500);
         } else {
-            //console.dir(result);
             if (result.rowCount === 0) {
                 response.status(404).json({ error: "User.UserId not found" });
             } else if (result.rowCount === 1) {

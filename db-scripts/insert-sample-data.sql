@@ -82,7 +82,7 @@ delete from public."Product";
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'FISH-ADULT-ORDER', 
 		'Fish', 
 		11.00, 
@@ -93,7 +93,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'ESTRA-FISH-ADULT-ORDER', 
 		'Extra Fish', 
 		13.00, 
@@ -104,7 +104,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'SHRIMP-ADULT-ORDER', 
 		'Shrimp', 
 		13.00, 
@@ -115,7 +115,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'EXTRA-SHRIMP-ADULT-ORDER', 
 		'Extra Shrimp', 
 		13.00, 
@@ -126,7 +126,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'COMBO-ADULT-ORDER', 
 		'Combo', 
 		11.00, 
@@ -139,7 +139,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'FISH-CHILD-ORDER', 
 		'Fish', 
 		6.50, 
@@ -150,7 +150,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'SHRIMP-CHILD-ORDER', 
 		'Shrimp', 
 		6.50, 
@@ -161,7 +161,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'COMBO-CHILD-ORDER', 
 		'Combo', 
 		6.50, 
@@ -174,7 +174,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'FISH-BULK-ORDER', 
 		'Fish', 
 		20.00, 
@@ -185,7 +185,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'SHRIMP-BULK-ORDER', 
 		'Shrimp', 
 		20.00, 
@@ -196,7 +196,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'SPAGHETTI-BULK-ORDER', 
 		'Spaghetti', 
 		3.00, 
@@ -207,7 +207,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'FF-BULK-ORDER', 
 		'French Fries', 
 		3.00, 
@@ -218,7 +218,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'APLSCE-BULK-ORDER', 
 		'Apple Sauce', 
 		3.00, 
@@ -229,7 +229,7 @@ INSERT INTO public."Product"(
 INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
-		nextval('public."ProductUnit_UnitId_seq"'), 
+		nextval('public."Product_ProductId_seq"'), 
 		'SLAW-BULK-ORDER', 
 		'Slaw', 
 		4.00, 
