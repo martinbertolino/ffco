@@ -40,84 +40,8 @@ pool.on('error', function (error, client) {
     console.error('idle client error', error.message, error.stack);
 });
 
-//  create a user
-app.post('/api/v1/user', function (request, response) {
-
-    const insertUserSQL = 'insert into public."User"("UserId", "UserName", "UserFirstName", "UserLastName") \
-        values (nextval(\'public."User_UserId_seq"\'), $1, $2, $3) returning "UserId"';
-    //TODO: need to improve the validation of the input data
-    const paramsSQL = [request.body.userName, request.body.userFirstName, request.body.userLastName];
-
-    genericQuery.queryOne(pool, insertUserSQL, paramsSQL, response, function (result) {
-        return { "userId": result.rows[0].UserId };
-    });
-});
-
-//  get a user by name
-app.get('/api/v1/user/name/:name', function (request, response) {
-
-    //TODO: we should probably sanitize the input here?  What does express do?
-    genericQuery.queryOne(pool, 'select * from public."User" t where t."UserName"=$1', [request.params.name], response, function (result) {
-        return {
-            userId: result.rows[0].UserId,
-            userName: result.rows[0].UserName,
-            userFirstName: result.rows[0].UserFirstName,
-            userLastName: result.rows[0].UserLastName
-        };
-    });
-});
-
-//  get a user by id
-app.get('/api/v1/user/id/:id', function (request, response) {
-
-    genericQuery.queryOne(pool, 'select * from public."User" t where t."UserId"=$1', [request.params.id], response, function (result) {
-        return {
-            userId: result.rows[0].UserId,
-            userName: result.rows[0].UserName,
-            userFirstName: result.rows[0].UserFirstName,
-            userLastName: result.rows[0].UserLastName
-        };
-    });
-});
-
-// get all users
-app.get('/api/v1/user/', function (request, response) {
-
-    genericQuery.queryMany(pool, 'select * from public."User"', [], response, function (item) {
-        return {
-            userId: item.UserId,
-            userName: item.UserName,
-            userFirstName: item.UserFirstName,
-            userLastName: item.UserLastName
-        };
-    });
-});
-
-// update a user by id
-app.put('/api/v1/user/id/:id', function (request, response) {
-
-    const updateUserSQL = 'update public."User" set "UserName"=$1, "UserFirstName"=$2, "UserLastName"=$3 where "UserId"=$4 returning "UserId"';
-
-    //TODO: need to improve the validation of the input data
-    const paramsSQL = [request.body.userName, request.body.userFirstName, request.body.userLastName, request.params.id];
-
-    genericQuery.queryOne(pool, updateUserSQL, paramsSQL, response, function (result) {
-        return { "userId": result.rows[0].UserId };
-    });
-});
-
-// delete a user by id
-app.delete('/api/v1/user/id/:id', function (request, response) {
-
-    const deleteUserSQL = 'delete from public."User" where "UserId"=$1 returning "UserId"';
-
-    //TODO: need to improve the validation of the inpute data
-    const paramsSQL = [request.params.id];
-
-    genericQuery.queryOne(pool, deleteUserSQL, paramsSQL, response, function (result) {
-        return { "userId": result.rows[0].UserId };
-    });
-});
+const userApi = require('./user')(pool, app);
+const productGroupingApi = require('./productGrouping')(pool, app);
 
 app.listen(3000, function () {
     console.log('user api ready.');
@@ -126,13 +50,14 @@ app.listen(3000, function () {
 //so the program will not close instantly
 process.stdin.resume();
 
-function exitHandler(options, err) {
+function exitHandler(options, error) {
     if (options.cleanup) {
         console.log('performing cleanup');
         pool.end();
     }
-    if (err) {
-        console.log(err.stack);
+    if (error) {
+        console.log(error.message);
+        console.log(error.stack);
     }
     if (options.exit) {
         process.exit();
