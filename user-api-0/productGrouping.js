@@ -4,7 +4,7 @@ const genericQuery = require("./genericQuery");
 
 module.exports = function (pool, app) {
 
-    //  create a user
+    //  create a product grouping
     app.post('/api/v1/productGrouping', function (request, response) {
 
         const insertSQL = 'insert into public."ProductGrouping"( \
@@ -28,7 +28,7 @@ module.exports = function (pool, app) {
         };
     };
 
-    //  get a user by name
+    //  get a product grouping by name
     app.get('/api/v1/productGrouping/name/:name', function (request, response) {
 
         //TODO: we should probably sanitize the input here?  What does express do?
@@ -37,7 +37,7 @@ module.exports = function (pool, app) {
         });
     });
 
-    //  get a user by id
+    //  get a product grouping by id
     app.get('/api/v1/productGrouping/id/:id', function (request, response) {
 
         genericQuery.queryOne(pool, 'select * from public."ProductGrouping" t where t."ProductGroupingId"=$1', [request.params.id], response, function (result) {
@@ -45,7 +45,7 @@ module.exports = function (pool, app) {
         });
     });
 
-    // get all users
+    // get all product groupings
     app.get('/api/v1/productGrouping/', function (request, response) {
 
         genericQuery.queryMany(pool, 'select * from public."ProductGrouping"', [], response, function (item) {
@@ -53,7 +53,7 @@ module.exports = function (pool, app) {
         });
     });
 
-    // update a user by id
+    // update a product grouping by id
     app.put('/api/v1/productGrouping/id/:id', function (request, response) {
 
         const updateSQL = 'update public."ProductGrouping" set "ProductGroupingName"=$1, "ProductGroupingDescription"=$2, "ProductGroupingOrder"=$3 where "ProductGroupingId"=$4 returning "ProductGroupingId"';
@@ -66,7 +66,7 @@ module.exports = function (pool, app) {
         });
     });
 
-    // delete a user by id
+    // delete a product grouping by id
     app.delete('/api/v1/productGrouping/id/:id', function (request, response) {
 
         const deleteSQL = 'delete from public."ProductGrouping" where "ProductGroupingId"=$1 returning "ProductGroupingId"';

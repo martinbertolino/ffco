@@ -25,7 +25,7 @@ describe('v1 api user tests/', function () {
         });
     });
 
-    describe('inititial user tests/', function () {
+    describe('initial user tests/', function () {
 
         const williamBaileyReference = {
             userName: 'wbailey0@imdb.com',
@@ -175,6 +175,8 @@ describe('v1 api user tests/', function () {
                 expect(error).to.be.null;
                 expect(response.statusCode).to.equal(200);
                 expect(response.statusMessage).to.equal('OK');
+                const user = body;
+                expect(user.userId).to.equal(newRandomUserId);
                 done();
             });
         });
@@ -220,6 +222,8 @@ describe('v1 api user tests/', function () {
                 expect(error).to.be.null;
                 expect(response.statusCode).to.equal(200);
                 expect(response.statusMessage).to.equal('OK');
+                const user = JSON.parse(body);
+                expect(user.userId).to.equal(newRandomUserId);              
                 done();
             });
         });

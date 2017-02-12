@@ -102,16 +102,16 @@ ALTER TABLE public."ProductGrouping"
     OWNER to postgres;
 
 -- ********************************************************************************
--- DROP SEQUENCE public."ProductUnit_UnitId_seq"; 
+-- DROP SEQUENCE public."ProductUnit_ProductUnitId_seq"; 
 
-CREATE SEQUENCE public."ProductUnit_UnitId_seq"
+CREATE SEQUENCE public."ProductUnit_ProductUnitId_seq"
     INCREMENT 1
     START 1
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
 
-ALTER SEQUENCE public."ProductUnit_UnitId_seq"
+ALTER SEQUENCE public."ProductUnit_ProductUnitId_seq"
     OWNER TO postgres;
 
 -- Table: public."ProductUnit"
@@ -120,7 +120,7 @@ ALTER SEQUENCE public."ProductUnit_UnitId_seq"
 
 CREATE TABLE public."ProductUnit"
 (
-    "ProductUnitId" integer NOT NULL DEFAULT nextval('"ProductUnit_UnitId_seq"'::regclass),
+    "ProductUnitId" integer NOT NULL DEFAULT nextval('"ProductUnit_ProductUnitId_seq"'::regclass),
     "ProductUnitName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
     "ProductUnitDescription" character varying(32) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT "ProductUnit_pkey" PRIMARY KEY ("ProductUnitId") USING INDEX TABLESPACE ffco,
@@ -200,7 +200,7 @@ CREATE TABLE public."SalesTransactionStatus"
 (
     "SalesTransactionStatusId" integer NOT NULL DEFAULT nextval('"SalesTransactionStatus_SalesTransactionStatusId_seq"'::regclass),
     "SalesTransactionStatusName" character varying(32) COLLATE pg_catalog."default" NOT NULL,
-    "SalesTransactionStatustDescription" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    "SalesTransactionStatusDescription" character varying(32) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT "SalesTransactionStatus_pkey" PRIMARY KEY ("SalesTransactionStatusId") USING INDEX TABLESPACE ffco,
     CONSTRAINT "SalesTransactionStatusName" UNIQUE ("SalesTransactionStatusName") USING INDEX TABLESPACE ffco
 )

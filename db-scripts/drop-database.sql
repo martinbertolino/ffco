@@ -16,7 +16,7 @@ DROP TABLE public."User";
 DROP SEQUENCE public."SalesTransaction_SalesTransactionId_seq"; 
 DROP SEQUENCE public."SalesTransactionStatus_SalesTransactionStatusId_seq"; 
 DROP SEQUENCE public."Product_ProductId_seq"; 
-DROP SEQUENCE public."ProductUnit_UnitId_seq"; 
+DROP SEQUENCE public."ProductUnit_ProductUnitId_seq"; 
 DROP SEQUENCE public."ProductGrouping_ProductGroupingId_seq"; 
 DROP SEQUENCE public."User_UserId_seq"; 
 

@@ -64,11 +64,11 @@ delete from public."ProductUnit";
 
 INSERT INTO public."ProductUnit"(
 	"ProductUnitId", "ProductUnitName", "ProductUnitDescription")
-	VALUES (nextval('public."ProductUnit_UnitId_seq"'), 'ORDER', 'Order(s)');
+	VALUES (nextval('public."ProductUnit_ProductUnitId_seq"'), 'ORDER', 'Order(s)');
 
 INSERT INTO public."ProductUnit"(
 	"ProductUnitId", "ProductUnitName", "ProductUnitDescription")
-	VALUES (nextval('public."ProductUnit_UnitId_seq"'), 'LB', 'Pound(s)');
+	VALUES (nextval('public."ProductUnit_ProductUnitId_seq"'), 'LB', 'Pound(s)');
 
 -- create some products, match previous screenshot
 
@@ -94,7 +94,7 @@ INSERT INTO public."Product"(
 	"ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder")
 	VALUES (
 		nextval('public."Product_ProductId_seq"'), 
-		'ESTRA-FISH-ADULT-ORDER', 
+		'EXTRA-FISH-ADULT-ORDER', 
 		'Extra Fish', 
 		13.00, 
 		(select "ProductGroupingId" from public."ProductGrouping" where "ProductGroupingName" = 'ADULT'), 
@@ -242,21 +242,21 @@ INSERT INTO public."Product"(
 -- delete from public."SalesTransactionStatus";
 
 INSERT INTO public."SalesTransactionStatus"(
-	"SalesTransactionStatusId", "SalesTransactionStatusName", "SalesTransactionStatustDescription")
+	"SalesTransactionStatusId", "SalesTransactionStatusName", "SalesTransactionStatusDescription")
 	VALUES (
 		nextval('public."SalesTransactionStatus_SalesTransactionStatusId_seq"'), 
 		'OK', 
 		'Billed Transaction');
 
 INSERT INTO public."SalesTransactionStatus"(
-	"SalesTransactionStatusId", "SalesTransactionStatusName", "SalesTransactionStatustDescription")
+	"SalesTransactionStatusId", "SalesTransactionStatusName", "SalesTransactionStatusDescription")
 	VALUES (
 		nextval('public."SalesTransactionStatus_SalesTransactionStatusId_seq"'), 
 		'VOID', 
 		'Voided Transaction');
 
 INSERT INTO public."SalesTransactionStatus"(
-	"SalesTransactionStatusId", "SalesTransactionStatusName", "SalesTransactionStatustDescription")
+	"SalesTransactionStatusId", "SalesTransactionStatusName", "SalesTransactionStatusDescription")
 	VALUES (
 		nextval('public."SalesTransactionStatus_SalesTransactionStatusId_seq"'), 
 		'FREE', 
@@ -270,6 +270,32 @@ select * from public."ProductGrouping";
 select * from public."ProductUnit";
 select * from public."Product";
 select * from public."SalesTransactionStatus";
+
+select * from public."User" as usr;
+
+select usr."UserLastName" from public."User" as usr;
+
+
+
+select "ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder" from public."Product";
+
+select "ProductId", "ProductName", "ProductDescription", "ProductPrice", "ProductGroupingId", "ProductUnitId", "ProductOrder" from public."Product"
+inner join public."ProductGrouping" on (public."Product"."ProductGroupingId" = pg."ProductGroupingId");
+
+
+select p."ProductId", p."ProductName", p."ProductDescription", p."ProductPrice", p."ProductGroupingId", p."ProductUnitId", p."ProductOrder" from public."Product" as p
+inner join public."ProductGrouping" as pg on (p."ProductGroupingId" = pg."ProductGroupingId");
+
+select p."ProductId", p."ProductName", p."ProductDescription", p."ProductPrice", p."ProductGroupingId", pg."ProductGroupingName", p."ProductUnitId", p."ProductOrder" from public."Product" as p
+inner join public."ProductGrouping" as pg on (p."ProductGroupingId" = pg."ProductGroupingId");
+
+select p."ProductId", p."ProductName", p."ProductDescription", p."ProductPrice", p."ProductGroupingId", pg."ProductGroupingName", p."ProductUnitId", pu."ProductUnitName", p."ProductOrder" from public."Product" as p
+inner join public."ProductGrouping" as pg on (p."ProductGroupingId" = pg."ProductGroupingId")
+inner join public."ProductUnit" as pu on (p."ProductUnitId" = pu."ProductUnitId");
+
+select p."ProductId", p."ProductName", p."ProductDescription", p."ProductPrice", pg."ProductGroupingName", pu."ProductUnitName", p."ProductOrder" from public."Product" as p
+inner join public."ProductGrouping" as pg on (p."ProductGroupingId" = pg."ProductGroupingId")
+inner join public."ProductUnit" as pu on (p."ProductUnitId" = pu."ProductUnitId");
 
 */
 

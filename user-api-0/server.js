@@ -40,8 +40,16 @@ pool.on('error', function (error, client) {
     console.error('idle client error', error.message, error.stack);
 });
 
+// For details see the following issue https://github.com/brianc/node-pg-types/issues/28
+// Fix for parsing of numeric fields
+var types = require('pg').types
+types.setTypeParser(1700, 'text', parseFloat);
+
 const userApi = require('./user')(pool, app);
 const productGroupingApi = require('./productGrouping')(pool, app);
+const productUnitApi = require('./productUnit')(pool, app);
+const productApi = require('./product')(pool, app);
+const salesTransactionStatusApi = require('./salesTransactionStatus')(pool, app);
 
 app.listen(3000, function () {
     console.log('user api ready.');

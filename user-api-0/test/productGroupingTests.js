@@ -17,7 +17,7 @@ describe('v1 api product grouping tests/', function () {
         }
     };
 
-    describe('inititial product grouping tests/', function () {
+    describe('initial product grouping tests/', function () {
 
         it('api is running', function (done) {
             request(baseGetInfo, (error, response, body) => {
@@ -97,7 +97,7 @@ describe('v1 api product grouping tests/', function () {
         });
     });
 
-    describe('inititial product grouping tests/', function () {
+    describe('new product grouping tests/', function () {
 
         //  construct a new random product grouping
         let newRandomProductGrouping = {
@@ -134,8 +134,6 @@ describe('v1 api product grouping tests/', function () {
                 expect(productGrouping.productGroupingName).to.equal(newRandomProductGrouping.productGroupingName);
                 expect(productGrouping.productGroupingDescription).to.be.equal(newRandomProductGrouping.productGroupingDescription);
                 expect(productGrouping.productGroupingOrder).to.be.equal(newRandomProductGrouping.productGroupingOrder);
-                //  save the id for the next test
-                productGroupingId = productGrouping.productGroupingId;
                 done();
             });
         });
@@ -164,12 +162,14 @@ describe('v1 api product grouping tests/', function () {
             };
             let putInfo = Object.assign({}, baseGetInfo);
             putInfo.method = 'PUT';
-            putInfo.uri = putInfo.uri + '/id/' + productGroupingId;
+            putInfo.uri = putInfo.uri + '/id/' + newRandomProductGroupingId;
             putInfo.json = newRandomProductGrouping;
             request(putInfo, (error, response, body) => {
                 expect(error).to.be.null;
                 expect(response.statusCode).to.equal(200);
                 expect(response.statusMessage).to.equal('OK');
+                const productGrouping = body;
+                expect(productGrouping.productGroupingId).to.be.equal(newRandomProductGroupingId);
                 done();
             });
         });
@@ -215,6 +215,8 @@ describe('v1 api product grouping tests/', function () {
                 expect(error).to.be.null;
                 expect(response.statusCode).to.equal(200);
                 expect(response.statusMessage).to.equal('OK');
+                const productGrouping = JSON.parse(body);
+                expect(productGrouping.productGroupingId).to.be.equal(newRandomProductGroupingId);
                 done();
             });
         });
