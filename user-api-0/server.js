@@ -50,6 +50,7 @@ const productGroupingApi = require('./productGrouping')(pool, app);
 const productUnitApi = require('./productUnit')(pool, app);
 const productApi = require('./product')(pool, app);
 const salesTransactionStatusApi = require('./salesTransactionStatus')(pool, app);
+const salesTransactionApi = require('./salesTransaction')(pool, app);
 
 app.listen(3000, function () {
     console.log('user api ready.');

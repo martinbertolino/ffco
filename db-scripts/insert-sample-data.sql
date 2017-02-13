@@ -262,6 +262,13 @@ INSERT INTO public."SalesTransactionStatus"(
 		'FREE', 
 		'Free Transaction');
 
+INSERT INTO public."SalesTransactionStatus"(
+	"SalesTransactionStatusId", "SalesTransactionStatusName", "SalesTransactionStatusDescription")
+	VALUES (
+		nextval('public."SalesTransactionStatus_SalesTransactionStatusId_seq"'), 
+		'PENDING', 
+		'Pending Transaction');
+
 /*
 final check of all the base data
 
